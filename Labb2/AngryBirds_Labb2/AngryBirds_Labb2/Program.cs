@@ -36,6 +36,75 @@ namespace AngryBirds_Labb2
             }
         }
 
+        //Search the DB if the user exists, otherwise add the user
+        private static void SearchOrAdd(ScoreContext context)
+        {
+            bool searchOrAddLoop = true;
+            Console.WriteLine("Enter username to see information, or enter a new username to add a new player.");
+            string inputString = Console.ReadLine();
+            bool result = context.Players.Any(x => x.PlayerName == inputString);
+
+            while(searchOrAddLoop)
+            {
+                if(result)
+                {
+                    var search = from s in context.Scores
+                                 where s.Player.PlayerName.Equals(inputString)
+                                 select s;
+                    bool hasNoScore = context.Scores.Any(x => x.Player.PlayerName == inputString);
+
+                    if(hasNoScore)
+                    {
+                        var search2 = (from s in context.Scores
+                                       where s.Player.PlayerName.Equals(inputString)
+                                       select s.Highscore).Sum();
+                        Console.Clear();
+
+                        Console.WriteLine($"Score table for {inputString}:\n");
+
+                        foreach(var item in search)
+                        {
+                            Console.WriteLine($"Level: {item.Level.NameOfLevel} \nMoves made: {item.Highscore}" + $"({item.Level.NumberOfBirds - item.Highscore} move(s) left)");
+                            Console.WriteLine();
+                        }
+                        Console.WriteLine("Total moves made: " + search2);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Score table for {inputString}: ");
+                        Console.WriteLine($"\nUser {inputString} has no current score.");
+                    }
+
+                    Console.ReadKey();
+                    Console.Clear();
+                    searchOrAddLoop = false;
+                }
+                else
+                {
+                    Console.WriteLine("Username does not exist. Do you want to add it to the database?");
+                    Console.WriteLine("---- Y/N? ----");
+                    string useranswer = Console.ReadLine().ToUpper();
+                    if(useranswer == "Y")
+                    {
+                        context.Players.Add(new Player { PlayerName = inputString });
+                        context.SaveChanges();
+                        Console.Clear();
+                        searchOrAddLoop = false;
+                    }
+                    else if (useranswer == "N")
+                    {
+                        Console.Clear();
+                        searchOrAddLoop = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid input, try again.");
+                    }
+                }
+            }
+        }
+
 
         //Function to update a users score on a level.
         private static void UpdateScore(ScoreContext context)

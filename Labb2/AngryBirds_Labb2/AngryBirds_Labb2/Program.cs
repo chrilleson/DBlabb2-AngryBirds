@@ -14,6 +14,29 @@ namespace AngryBirds_Labb2
 
         }
 
+        //Print the existing data in the DB tables
+        private static void PrintDBTables(ScoreContext context)
+        {
+            Console.WriteLine("Players: ");
+            foreach(var item in context.Players)
+            {
+                Console.WriteLine($"PlayerID: {item.PlayerID}, Username: {item.PlayerName}");
+            }
+            Console.WriteLine();
+            Console.WriteLine("Levels: ");
+            foreach(var item in context.Levels)
+            {
+                Console.WriteLine($"LevelID: {item.LevelID}, Name of level: {item.NameOfLevel}, Max birds: {item.NumberOfBirds}");
+            }
+            Console.WriteLine();
+            Console.WriteLine("Score: ");
+            foreach(var item in context.Scores)
+            {
+                Console.WriteLine($"Player: {item.Player.PlayerName}, Level: {item.Level.NameOfLevel}, Highscore: {item.Highscore}");
+            }
+        }
+
+
         //Function to update a users score on a level.
         private static void UpdateScore(ScoreContext context)
         {

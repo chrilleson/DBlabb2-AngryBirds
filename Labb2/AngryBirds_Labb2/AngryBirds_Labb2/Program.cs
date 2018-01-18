@@ -132,6 +132,36 @@ namespace AngryBirds_Labb2
             Console.WriteLine();
         }
 
+        //Adding a new level to the database
+        private static void AddLevel(ScoreContext context)
+        {
+            bool checkBirdLoop = true;
+
+            Console.WriteLine("Enter name of level: ");
+            string newLevel = Console.ReadLine();
+            while (checkBirdLoop)
+            {
+                Console.WriteLine("Enter the amount of birds the level has (1 - 15");
+                Console.Write("Number: ");
+                string birdAmount = Console.ReadLine();
+                int birdAmountValidNumber;
+                int.TryParse(birdAmount, out birdAmountValidNumber);
+
+                if(birdAmountValidNumber <= 15 && birdAmountValidNumber >= 1)
+                {
+                    context.Levels.Add(new Level { NameOfLevel = newLevel, NumberOfBirds = birdAmountValidNumber });
+                    context.SaveChanges();
+                    Console.Clear();
+                    checkBirdLoop = false;
+                }
+                else
+                {
+                    Console.WriteLine("Please enter amount of birds between 1 - 15.");
+                }
+            }
+
+        }
+
 
     }
 }

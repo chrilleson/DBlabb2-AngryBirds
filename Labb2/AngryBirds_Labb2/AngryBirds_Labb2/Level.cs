@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AngryBirds_Labb2
 {
-    class Level
+    public class Level
     {
         public int LevelID { get; set; }
         [Required]

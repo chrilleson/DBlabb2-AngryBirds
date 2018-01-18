@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AngryBirds_Labb2
 {
-    class Score
+    public class Score
     {
         [Key]
         public int ScoreID { get; set; }

@@ -10,7 +10,44 @@ namespace AngryBirds_Labb2
     {
         static void Main(string[] args)
         {
+            bool programRunning = true;
 
+            using (var ctx = new ScoreContext())
+            {
+                while(programRunning)
+                {
+                    PrintDBTables(ctx);
+                    Console.WriteLine();
+                    Console.WriteLine("Type any number to chose what you want to do next? \n1. Search or add user \n2.Update user score \n3.Add a new Level \n4.Exit");
+                    string userChoice = Console.ReadLine();
+                    int userChoiceValidNumber;
+                    int.TryParse(userChoice, out userChoiceValidNumber);
+
+                    if (userChoice == "1")
+                    {
+                        SearchOrAdd(ctx);
+                    }
+                    else if (userChoice == "2")
+                    {
+                        UpdateScore(ctx);
+                    }
+                    else if (userChoice == "3")
+                    {
+                        Console.Clear();
+                        AddLevel(ctx);
+                    }
+                    else if (userChoice == "4")
+                    {
+                        programRunning = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Try again.");
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+                }
+            }
 
         }
 

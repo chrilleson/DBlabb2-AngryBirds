@@ -23,7 +23,8 @@ namespace AngryBirds_Labb2
 
             if(searchresult)
             {
-                int usernameID = usernameID
+                int usernameID = GetUserID(context, usernameInput);
+                PrintLevelsFromScoreList();
             }
         }
 
@@ -34,6 +35,18 @@ namespace AngryBirds_Labb2
             return getID.PlayerID;
         }
 
+        //Shows you the current level list 
+        private static void PrintLevelsFromScoreList(ScoreContext context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("List of Levels: ");
+            foreach(var item in context.Scores)
+            {
+                Console.WriteLine($"Name of level: {item.Level.NameOfLevel} ID: {item.Level.LevelID}, Max of birds: {item.Level.NumberOfBirds}\nHighscore: {item.Player.PlayerName} : {item.Highscore}");
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        }
 
 
     }

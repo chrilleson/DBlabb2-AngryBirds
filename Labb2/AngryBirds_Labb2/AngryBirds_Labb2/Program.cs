@@ -105,6 +105,7 @@ namespace AngryBirds_Labb2
                             Console.WriteLine();
                         }
                         Console.WriteLine("Total moves made: " + search2);
+                        Console.WriteLine("Press enter to return main menu");
 
                     }
                     else

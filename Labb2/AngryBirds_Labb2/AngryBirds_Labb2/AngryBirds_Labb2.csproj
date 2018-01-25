@@ -54,6 +54,10 @@
     <Compile Include="Migrations\201801190904551_Initial.Designer.cs">
       <DependentUpon>201801190904551_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201801251344124_changedPlayerName.cs" />
+    <Compile Include="Migrations\201801251344124_changedPlayerName.Designer.cs">
+      <DependentUpon>201801251344124_changedPlayerName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
@@ -68,6 +72,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201801190904551_Initial.resx">
       <DependentUpon>201801190904551_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201801251344124_changedPlayerName.resx">
+      <DependentUpon>201801251344124_changedPlayerName.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

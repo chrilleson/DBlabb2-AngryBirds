@@ -14,37 +14,32 @@ namespace AngryBirds_Labb2
 
             using (var ctx = new ScoreContext())
             {
-                while(programRunning)
+                while (programRunning)
                 {
                     PrintDBTables(ctx);
                     Console.WriteLine();
                     Console.WriteLine("Type any number to chose what you want to do next? \n1. Search or add user \n2.Update user score \n3.Add a new Level \n4.Exit");
                     string userChoice = Console.ReadLine();
-                    int userChoiceValidNumber;
-                    int.TryParse(userChoice, out userChoiceValidNumber);
-
-                    if (userChoice == "1")
+                    switch (userChoice)
                     {
-                        SearchOrAdd(ctx);
-                    }
-                    else if (userChoice == "2")
-                    {
-                        UpdateScore(ctx);
-                    }
-                    else if (userChoice == "3")
-                    {
-                        Console.Clear();
-                        AddLevel(ctx);
-                    }
-                    else if (userChoice == "4")
-                    {
-                        programRunning = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Try again.");
-                        Console.ReadKey();
-                        Console.Clear();
+                        case "1":
+                            SearchOrAdd(ctx);
+                            break;
+                        case "2":
+                            UpdateScore(ctx);
+                            break;
+                        case "3":
+                            Console.Clear();
+                            AddLevel(ctx);
+                            break;
+                        case "4":
+                            programRunning = false;
+                            break;
+                        default:
+                            Console.WriteLine("You must enter a valid number. Press enter one time");
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
                     }
                 }
             }
@@ -55,19 +50,15 @@ namespace AngryBirds_Labb2
         private static void PrintDBTables(ScoreContext context)
         {
             Console.WriteLine("Players: ");
-            foreach(var item in context.Players)
+            foreach (var item in context.Players)
             {
                 Console.WriteLine($"PlayerID: {item.PlayerID}, Username: {item.Username}");
             }
-            Console.WriteLine();
-            Console.WriteLine("Levels: ");
-            foreach(var item in context.Levels)
-            {
-                Console.WriteLine($"LevelID: {item.LevelID}, Name of level: {item.NameOfLevel}, Max birds: {item.NumberOfBirds}");
-            }
-            Console.WriteLine();
+
+            Levels(context);
+
             Console.WriteLine("Score: ");
-            foreach(var item in context.Scores)
+            foreach (var item in context.Scores)
             {
                 Console.WriteLine($"Player: {item.Player.Username}, Level: {item.Level.NameOfLevel}, Highscore: {item.Highscore}");
             }
@@ -81,16 +72,16 @@ namespace AngryBirds_Labb2
             string inputString = Console.ReadLine();
             bool result = context.Players.Any(x => x.Username == inputString);
 
-            while(searchOrAddLoop)
+            while (searchOrAddLoop)
             {
-                if(result)
+                if (result)
                 {
                     var search = from s in context.Scores
                                  where s.Player.Username.Equals(inputString)
                                  select s;
                     bool hasNoScore = context.Scores.Any(x => x.Player.Username == inputString);
 
-                    if(hasNoScore)
+                    if (hasNoScore)
                     {
                         var search2 = (from s in context.Scores
                                        where s.Player.Username.Equals(inputString)
@@ -99,7 +90,7 @@ namespace AngryBirds_Labb2
 
                         Console.WriteLine($"Score table for {inputString}:\n");
 
-                        foreach(var item in search)
+                        foreach (var item in search)
                         {
                             Console.WriteLine($"Level: {item.Level.NameOfLevel} \nMoves made: {item.Highscore}" + $"({item.Level.NumberOfBirds - item.Highscore} move(s) left)");
                             Console.WriteLine();
@@ -121,16 +112,16 @@ namespace AngryBirds_Labb2
                 else
                 {
                     Console.WriteLine("Username does not exist. Do you want to add it to the database?");
-                    Console.WriteLine("---- Y/N? ----");
+                    Console.WriteLine("---- YES/N0? ----");
                     string useranswer = Console.ReadLine().ToUpper();
-                    if(useranswer == "Y")
+                    if (useranswer == "YES" || useranswer == "Y")
                     {
                         context.Players.Add(new Player { Username = inputString });
                         context.SaveChanges();
                         Console.Clear();
                         searchOrAddLoop = false;
                     }
-                    else if (useranswer == "N")
+                    else if (useranswer == "NO" || useranswer == "N")
                     {
                         Console.Clear();
                         searchOrAddLoop = false;
@@ -152,13 +143,12 @@ namespace AngryBirds_Labb2
             string usernameInput = Console.ReadLine();
             bool searchresult = context.Players.Any(x => x.Username == usernameInput);
 
-            if(searchresult)
+            if (searchresult)
             {
                 int usernameID = GetUserID(context, usernameInput);
-                PrintLevelsFromScoreList(context);
-
+                Levels(context);
                 int levelIDInput;
-                while(true)
+                while (true)
                 {
                     Console.WriteLine("Enter LevelID: ");
                     if (int.TryParse(Console.ReadLine(), out levelIDInput))
@@ -172,17 +162,17 @@ namespace AngryBirds_Labb2
                 }
                 bool levelResult = context.Levels.Any(x => x.LevelID == levelIDInput);
 
-                if(levelResult)
+                if (levelResult)
                 {
                     Console.WriteLine($"Enter the new score for player: {usernameInput} on LevelID: {levelIDInput}");
                     int highscoreInputInt;
-                    while(true)
+                    while (true)
                     {
-                        if(int.TryParse(Console.ReadLine(), out highscoreInputInt))
+                        if (int.TryParse(Console.ReadLine(), out highscoreInputInt))
                         {
                             var getMaxBirds = context.Levels.Where(l => l.LevelID == levelIDInput).FirstOrDefault();
 
-                            if(highscoreInputInt > getMaxBirds.NumberOfBirds || highscoreInputInt < 0)
+                            if (highscoreInputInt > getMaxBirds.NumberOfBirds || highscoreInputInt < 0)
                             {
                                 Console.WriteLine("Input is too large, check max allowed score.");
                             }
@@ -199,7 +189,7 @@ namespace AngryBirds_Labb2
                     }
                     bool CheckForUserScore = context.Scores.Any(s => s.Player.PlayerID == usernameID && s.Level.LevelID == levelIDInput);
 
-                    if(CheckForUserScore)
+                    if (CheckForUserScore)
                     {
                         var userHighScore = context.Scores
                             .Where(s => s.Player.PlayerID == usernameID && s.Level.LevelID == levelIDInput)
@@ -225,7 +215,7 @@ namespace AngryBirds_Labb2
                         Console.WriteLine($"New score added for user {GetUsername.Username.ToUpper()} on {GetLevelName.NameOfLevel.ToUpper()}, highscore: {highscoreInputInt}.");
                         Console.ReadLine();
                     }
-
+                    Console.Clear();
                 }
                 else
                 {
@@ -254,7 +244,7 @@ namespace AngryBirds_Labb2
         {
             Console.WriteLine();
             Console.WriteLine("List of Levels: ");
-            foreach(var item in context.Scores)
+            foreach (var item in context.Scores)
             {
                 Console.WriteLine($"Name of level: {item.Level.NameOfLevel} ID: {item.Level.LevelID}, Max of birds: {item.Level.NumberOfBirds}\nHighscore: {item.Player.Username} : {item.Highscore}");
                 Console.WriteLine();
@@ -277,7 +267,7 @@ namespace AngryBirds_Labb2
                 int birdAmountValidNumber;
                 int.TryParse(birdAmount, out birdAmountValidNumber);
 
-                if(birdAmountValidNumber <= 15 && birdAmountValidNumber >= 1)
+                if (birdAmountValidNumber <= 15 && birdAmountValidNumber >= 1)
                 {
                     context.Levels.Add(new Level { NameOfLevel = newLevel, NumberOfBirds = birdAmountValidNumber });
                     context.SaveChanges();
@@ -291,7 +281,16 @@ namespace AngryBirds_Labb2
             }
 
         }
-
+        private static void Levels(ScoreContext context)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Levels: ");
+            foreach (var item in context.Levels)
+            {
+                Console.WriteLine($"LevelID: {item.LevelID}, Name of level: {item.NameOfLevel}, Max birds: {item.NumberOfBirds}");
+            }
+            Console.WriteLine();
+        }
 
     }
 }

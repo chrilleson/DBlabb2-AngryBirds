@@ -18,8 +18,8 @@ namespace AngryBirds_Labb2.Migrations
             //  This method will be called after migrating to the latest version.
             var level1 = context.Levels.Add(new Level { NumberOfBirds = 10, NameOfLevel = "KnutsLevel" });
             var level2 = context.Levels.Add(new Level { NumberOfBirds = 8, NameOfLevel = "Chrillelevel" });
-            var player1 = context.Players.Add(new Player { PlayerName = "Knut" });
-            var player2 = context.Players.Add(new Player { PlayerName = "Christoffer" });
+            var player1 = context.Players.Add(new Player { Username = "Knut" });
+            var player2 = context.Players.Add(new Player { Username = "Christoffer" });
 
             context.SaveChanges();
 

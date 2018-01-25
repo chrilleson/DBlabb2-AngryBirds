@@ -7,13 +7,13 @@ namespace AngryBirds_Labb2.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class changedPlayerName : IMigrationMetadata
+    public sealed partial class ChangedPlayerName : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(changedPlayerName));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ChangedPlayerName));
         
         string IMigrationMetadata.Id
         {
-            get { return "201801251344124_changedPlayerName"; }
+            get { return "201801251424033_ChangedPlayerName"; }
         }
         
         string IMigrationMetadata.Source

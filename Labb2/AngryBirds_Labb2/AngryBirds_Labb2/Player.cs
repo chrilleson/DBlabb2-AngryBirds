@@ -13,7 +13,7 @@ namespace AngryBirds_Labb2
         [Key]
         public int PlayerID { get; set; }
         [Required]
-        public string PlayerName { get; set; }
+        public string Username { get; set; }
         public virtual ICollection<Score> Scoreboard { get; set; }
     }
 

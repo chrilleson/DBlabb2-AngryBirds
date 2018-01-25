@@ -57,7 +57,7 @@ namespace AngryBirds_Labb2
             Console.WriteLine("Players: ");
             foreach(var item in context.Players)
             {
-                Console.WriteLine($"PlayerID: {item.PlayerID}, Username: {item.PlayerName}");
+                Console.WriteLine($"PlayerID: {item.PlayerID}, Username: {item.Username}");
             }
             Console.WriteLine();
             Console.WriteLine("Levels: ");
@@ -69,7 +69,7 @@ namespace AngryBirds_Labb2
             Console.WriteLine("Score: ");
             foreach(var item in context.Scores)
             {
-                Console.WriteLine($"Player: {item.Player.PlayerName}, Level: {item.Level.NameOfLevel}, Highscore: {item.Highscore}");
+                Console.WriteLine($"Player: {item.Player.Username}, Level: {item.Level.NameOfLevel}, Highscore: {item.Highscore}");
             }
         }
 
@@ -79,21 +79,21 @@ namespace AngryBirds_Labb2
             bool searchOrAddLoop = true;
             Console.WriteLine("Enter username to see information, or enter a new username to add a new player.");
             string inputString = Console.ReadLine();
-            bool result = context.Players.Any(x => x.PlayerName == inputString);
+            bool result = context.Players.Any(x => x.Username == inputString);
 
             while(searchOrAddLoop)
             {
                 if(result)
                 {
                     var search = from s in context.Scores
-                                 where s.Player.PlayerName.Equals(inputString)
+                                 where s.Player.Username.Equals(inputString)
                                  select s;
-                    bool hasNoScore = context.Scores.Any(x => x.Player.PlayerName == inputString);
+                    bool hasNoScore = context.Scores.Any(x => x.Player.Username == inputString);
 
                     if(hasNoScore)
                     {
                         var search2 = (from s in context.Scores
-                                       where s.Player.PlayerName.Equals(inputString)
+                                       where s.Player.Username.Equals(inputString)
                                        select s.Highscore).Sum();
                         Console.Clear();
 
@@ -125,7 +125,7 @@ namespace AngryBirds_Labb2
                     string useranswer = Console.ReadLine().ToUpper();
                     if(useranswer == "Y")
                     {
-                        context.Players.Add(new Player { PlayerName = inputString });
+                        context.Players.Add(new Player { Username = inputString });
                         context.SaveChanges();
                         Console.Clear();
                         searchOrAddLoop = false;
@@ -150,7 +150,7 @@ namespace AngryBirds_Labb2
             Console.Clear();
             Console.WriteLine("Type the Username you want to update: ");
             string usernameInput = Console.ReadLine();
-            bool searchresult = context.Players.Any(x => x.PlayerName == usernameInput);
+            bool searchresult = context.Players.Any(x => x.Username == usernameInput);
 
             if(searchresult)
             {
@@ -207,7 +207,7 @@ namespace AngryBirds_Labb2
                         userHighScore.Highscore = highscoreInputInt;
                         context.SaveChanges();
 
-                        Console.WriteLine($"{userHighScore.Player.PlayerName.ToUpper()}'s score updated on {userHighScore.Level.NameOfLevel.ToUpper()} with highscore {userHighScore.Highscore}");
+                        Console.WriteLine($"{userHighScore.Player.Username.ToUpper()}'s score updated on {userHighScore.Level.NameOfLevel.ToUpper()} with highscore {userHighScore.Highscore}");
                         Console.ReadLine();
                     }
                     else
@@ -222,7 +222,7 @@ namespace AngryBirds_Labb2
                         context.Scores.Add(new Score { Player = GetUsername, Level = GetLevelName, Highscore = highscoreInputInt });
                         context.SaveChanges();
 
-                        Console.WriteLine($"New score added for user {GetUsername.PlayerName.ToUpper()} on {GetLevelName.NameOfLevel.ToUpper()}, highscore: {highscoreInputInt}.");
+                        Console.WriteLine($"New score added for user {GetUsername.Username.ToUpper()} on {GetLevelName.NameOfLevel.ToUpper()}, highscore: {highscoreInputInt}.");
                         Console.ReadLine();
                     }
 
@@ -245,7 +245,7 @@ namespace AngryBirds_Labb2
         //Look if the users ID exists.
         private static int GetUserID(ScoreContext context, string username)
         {
-            var getID = context.Players.Where(u => u.PlayerName == username).FirstOrDefault();
+            var getID = context.Players.Where(u => u.Username == username).FirstOrDefault();
             return getID.PlayerID;
         }
 
@@ -256,7 +256,7 @@ namespace AngryBirds_Labb2
             Console.WriteLine("List of Levels: ");
             foreach(var item in context.Scores)
             {
-                Console.WriteLine($"Name of level: {item.Level.NameOfLevel} ID: {item.Level.LevelID}, Max of birds: {item.Level.NumberOfBirds}\nHighscore: {item.Player.PlayerName} : {item.Highscore}");
+                Console.WriteLine($"Name of level: {item.Level.NameOfLevel} ID: {item.Level.LevelID}, Max of birds: {item.Level.NumberOfBirds}\nHighscore: {item.Player.Username} : {item.Highscore}");
                 Console.WriteLine();
             }
             Console.WriteLine();
